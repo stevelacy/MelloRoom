@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
     private Button button;
-    private Button button2;
+    private Button chooseColor;
     NsdManager manager;
     NsdManager.ResolveListener resolveListener;
     NsdManager.DiscoveryListener discoveryListener;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.editText);
         button = (Button) findViewById(R.id.button);
-        button2 = (Button) findViewById(R.id.button2);
+        chooseColor = (Button) findViewById(R.id.chooseColor);
 
         manager = (NsdManager) this.getSystemService(Context.NSD_SERVICE);
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        chooseColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cp.show();
