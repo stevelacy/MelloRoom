@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private TextView textView;
-    private Button button;
+    private Button scanButton;
     private Button chooseColor;
     NsdManager manager;
     NsdManager.ResolveListener resolveListener;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         final ColorPicker cp = new ColorPicker(MainActivity.this, defaultColorR, defaultColorG, defaultColorB);
 
         textView = (TextView) findViewById(R.id.editText);
-        button = (Button) findViewById(R.id.button);
+        scanButton = (Button) findViewById(R.id.scanButton);
         chooseColor = (Button) findViewById(R.id.chooseColor);
 
         manager = (NsdManager) this.getSystemService(Context.NSD_SERVICE);
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         initializeDiscoveryListener();
         initializeResolveListener();
 
-        button.setOnClickListener(new View.OnClickListener() {
+        scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 discoverServices();
@@ -72,21 +72,21 @@ public class MainActivity extends AppCompatActivity {
         chooseColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cp.show();
-                Button okColor = (Button) cp.findViewById(R.id.okColorButton);
-                okColor.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        defaultColorR = cp.getRed();
-                        defaultColorG = cp.getGreen();
-                        defaultColorB = cp.getBlue();
-                        mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
+            cp.show();
+            Button okColor = (Button) cp.findViewById(R.id.okColorButton);
+            okColor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                defaultColorR = cp.getRed();
+                defaultColorG = cp.getGreen();
+                defaultColorB = cp.getBlue();
+                mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
 
-                        String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
-                        httpRequest(deviceUrl);
-                        cp.dismiss();
-                    }
-                });
+                String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
+                httpRequest(deviceUrl);
+                cp.dismiss();
+                }
+            });
 
             }
         });
@@ -161,13 +161,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-//                int port = serviceInfo.getPort();
                 final InetAddress host = serviceInfo.getHost();
                 deviceHost = host.toString().replaceAll("/","");
-
-//                Log.d(TAG, Integer.toString(port));
-//                Log.d(TAG, host.toString());
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -181,13 +176,11 @@ public class MainActivity extends AppCompatActivity {
     public void discoverServices() {
         manager.discoverServices(SERVICE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
     }
-
-
+    
     public void httpRequest(final String deviceUrl) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                BufferedReader reader;
                 Log.d(TAG, deviceUrl);
                 URL url;
                 HttpURLConnection urlConnection = null;
