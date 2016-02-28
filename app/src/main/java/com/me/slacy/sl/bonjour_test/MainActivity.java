@@ -10,8 +10,11 @@ import android.net.nsd.NsdManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
@@ -30,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private Button scanButton;
     private Button chooseColor;
+    private Switch tSwitch;
     NsdManager manager;
     NsdManager.ResolveListener resolveListener;
     NsdManager.DiscoveryListener discoveryListener;
-    NsdManager.RegistrationListener registrationListener;
+    private Boolean isDiscoveryStarted = false;
 
     public static final String SERVICE = "_arduino._tcp";
     public static final String TAG = "YUN-search";
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private static int defaultColorR = 0;
     private static int defaultColorG = 200;
     private static int defaultColorB = 200;
+
+    private static String initStatus = "Searching";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +60,45 @@ public class MainActivity extends AppCompatActivity {
         final ColorPicker cp = new ColorPicker(MainActivity.this, defaultColorR, defaultColorG, defaultColorB);
 
         textView = (TextView) findViewById(R.id.editText);
-        scanButton = (Button) findViewById(R.id.scanButton);
+//        scanButton = (Button) findViewById(R.id.scanButton);
         chooseColor = (Button) findViewById(R.id.chooseColor);
+        tSwitch = (Switch) findViewById(R.id.switch1);
+
+
+        tSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    defaultColorR = 0;
+                    defaultColorG = 200;
+                    defaultColorB = 200;
+                    mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
+                    String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
+                    httpRequest(deviceUrl);
+                } else {
+                    defaultColorR = 0;
+                    defaultColorG = 0;
+                    defaultColorB = 0;
+                    mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
+                    String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
+                    httpRequest(deviceUrl);
+                }
+            }
+
+        });
 
         manager = (NsdManager) this.getSystemService(Context.NSD_SERVICE);
 
         initializeDiscoveryListener();
         initializeResolveListener();
 
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                discoverServices();
-            }
-        });
+        discoverServices();
+
+//        scanButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                discoverServices();
+//            }
+//        });
 
         chooseColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,9 +205,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void discoverServices() {
+        if (isDiscoveryStarted) {
+            return;
+        }
+        isDiscoveryStarted = true;
         manager.discoverServices(SERVICE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
     }
-    
+
     public void httpRequest(final String deviceUrl) {
         new AsyncTask<Void, Void, String>() {
             @Override
