@@ -20,13 +20,13 @@
         android:layout_alignParentEnd="true"
         android:textAlignment="center" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SCAN"
-        android:id="@+id/scanButton"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="SCAN"-->
+        <!--android:id="@+id/scanButton"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -35,6 +35,15 @@
         android:text="CHOOSE COLOR"
         android:id="@+id/chooseColor"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch1"
+        android:layout_marginBottom="72dp"
+        android:layout_above="@+id/chooseColor"
+        android:checked="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
