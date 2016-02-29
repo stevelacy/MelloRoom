@@ -15,18 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:layout_below="@+id/scanButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:text="Searching..."
         android:textAlignment="center" />
-
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="SCAN"-->
-        <!--android:id="@+id/scanButton"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_centerHorizontal="true" />-->
 
     <Button
         style="?android:attr/buttonStyleSmall"

@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private static int defaultColorG = 200;
     private static int defaultColorB = 200;
 
-    private static String initStatus = "Searching";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         final ColorPicker cp = new ColorPicker(MainActivity.this, defaultColorR, defaultColorG, defaultColorB);
 
         textView = (TextView) findViewById(R.id.editText);
-//        scanButton = (Button) findViewById(R.id.scanButton);
         chooseColor = (Button) findViewById(R.id.chooseColor);
         tSwitch = (Switch) findViewById(R.id.switch1);
 
