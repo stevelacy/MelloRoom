@@ -68,19 +68,11 @@ public class MainActivity extends AppCompatActivity {
         tSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    defaultColorR = 0;
-                    defaultColorG = 200;
-                    defaultColorB = 200;
-                    mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
-                    String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
-                    httpRequest(deviceUrl);
+                    mainLayout.setBackgroundColor(Color.argb(255, 0, 200, 200));
+                    setColor(0, 200, 200);
                 } else {
-                    defaultColorR = 0;
-                    defaultColorG = 0;
-                    defaultColorB = 0;
                     mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
-                    String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
-                    httpRequest(deviceUrl);
+                    setColor(0, 0, 0);
                 }
             }
 
@@ -90,15 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
         initializeDiscoveryListener();
         initializeResolveListener();
-
         discoverServices();
 
-//        scanButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                discoverServices();
-//            }
-//        });
 
         chooseColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,13 +93,8 @@ public class MainActivity extends AppCompatActivity {
             okColor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                defaultColorR = cp.getRed();
-                defaultColorG = cp.getGreen();
-                defaultColorB = cp.getBlue();
                 mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
-
-                String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
-                httpRequest(deviceUrl);
+                setColor(cp.getRed(), cp.getGreen(), cp.getBlue());
                 cp.dismiss();
                 }
             });
@@ -125,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void setColor (int r, int g, int b) {
+        defaultColorR = r;
+        defaultColorG = g;
+        defaultColorB = b;
+        String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
+        httpRequest(deviceUrl);
+    }
 
     public void initializeDiscoveryListener() {
 
