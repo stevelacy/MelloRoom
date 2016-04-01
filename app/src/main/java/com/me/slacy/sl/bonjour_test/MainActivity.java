@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private TextView textView;
+    private RelativeLayout mainLayout;
     private Button scanButton;
     private Button chooseColor;
     private Switch tSwitch;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
+        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
         mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
 
         final ColorPicker cp = new ColorPicker(MainActivity.this, defaultColorR, defaultColorG, defaultColorB);
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             okColor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
                 setColor(cp.getRed(), cp.getGreen(), cp.getBlue());
                 cp.dismiss();
                 }
@@ -106,6 +106,13 @@ public class MainActivity extends AppCompatActivity {
         defaultColorR = r;
         defaultColorG = g;
         defaultColorB = b;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainLayout.setBackgroundColor(Color.argb(255, defaultColorR, defaultColorG, defaultColorB));
+            }
+        });
+
         String deviceUrl = "http://" + deviceHost + "/arduino/led/" + defaultColorR + "/" + defaultColorG + "/" + defaultColorB;
         httpRequest(deviceUrl);
     }
